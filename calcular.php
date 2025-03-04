@@ -5,10 +5,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     list($network, $mask, $broadcast, $range) = calcularXarxa($ip, $cidr);
 }
+
 function calcularXarxa($ip, $cidr) {
     $subnet = long2ip(ip2long($ip) & ~((1 << (32 - $cidr)) - 1));
     $broadcast = long2ip(ip2long($subnet) | ((1 << (32 - $cidr)) - 1));
-    $range = $subnet . " - " . long2ip(ip2long($broadcast) - 1);
+    $range = long2ip(ip2long($subnet) + 1) . " - " . long2ip(ip2long($broadcast) - 1);
     return [$subnet, "/$cidr", $broadcast, $range];
 }
 ?>
@@ -21,7 +22,7 @@ function calcularXarxa($ip, $cidr) {
     <title>Resultats de la Xarxa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* Estilos generales */
+        /* Estilos generals */
         body {
             font-family: 'Arial', sans-serif;
             background: #f4f4f9;
